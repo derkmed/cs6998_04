@@ -121,3 +121,20 @@ To control the number of summary sentences, simply add the flag `--ctrl_nb_summa
 ```console
 ❱❱❱ python hf_train_bart.py --do_segment --gen_keyphrase_summary --use_pred_segment --output_dir=save/bart-large-xsum-samsum-segment-genkpsum/ --load_path=save/bart-large-xsum-samsum-segment-genkpsum/pytorch.bin --test_target_max_len=400 --ctrl_nb_summary_sent=1 --add_name=predseg-ctrl1
 ```
+
+
+----
+
+## Creating a local virtual environment
+
+Please refer to [these docs](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/).
+```
+python3 -m venv env
+source env/bin/activate
+python3 -m pip install ../requirements.txt #run from CODS/preprocess folder
+python3 # you can now run python3 interactively in the proper runtime environment
+>>> import preprocess_data as pd
+>>> pd.main()
+...
+deactivate # when finished
+```
