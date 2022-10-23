@@ -25,8 +25,9 @@ e.g.
 'key_phrases': ['check in the drawer next to the fridge']
 """
 
-nlp = spacy.load('en')
-nlp.add_pipe(BeneparComponent('benepar_en3'))
+nlp = spacy.load('en_core_web_md')
+# see https://spacy.io/universe/project/self-attentive-parser
+nlp.add_pipe('benepar', config={'model': 'benepar_en3'})
 
 stemmer = PorterStemmer()
 english_stopwords = list(stopwords.words('english'))
