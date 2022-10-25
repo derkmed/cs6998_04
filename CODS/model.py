@@ -32,6 +32,7 @@ class TypedModel(nn.Module):
         return next(self.parameters()).device
 
     def forward(self, data, evaluate=False):
+        # See https://pytorch.org/blog/pytorch-0_4_0-migration-guide/#writing-device-agnostic-code .
         document = data['document'].to(self.device)
         label = data['label'].to(self.device)
 
@@ -60,16 +61,18 @@ class SegmentPredictor(nn.Module):
         return next(self.parameters()).device
 
     def forward(self, data, evaluate=False):
+        # See https://pytorch.org/blog/pytorch-0_4_0-migration-guide/#writing-device-agnostic-code .
         document = data['document'].to(self.device)
         segment_label = data['segment_label'].to(self.device)
         output = self.model(document)
         all_seq_hs = output[0]  # batch_size, seq_len, hd_dim
 
         sent_repr_mat = []
+        # [CLS]=101 delimits utterances.
         turn_nums = [(item == 101).sum().cpu().item() for item in document]
         max_turn_num = max(turn_nums)
         for i in range(all_seq_hs.size(0)):
-            sent_repr = all_seq_hs[i][document[i] == 101]  # [num_of_turns, hd_dim]
+            sent_repr = all_seq_hs[i][document[i] == 101]  # [num_of_turns, hd_dim], [CLS] = 101
             sent_repr = torch.cat(
                 [sent_repr, torch.zeros(max_turn_num - turn_nums[i], sent_repr.size(1)).to(self.device)], 0)
             sent_repr_mat.append(sent_repr)

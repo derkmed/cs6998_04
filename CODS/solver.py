@@ -234,7 +234,7 @@ def train_intent_predictor(base_model: TypedModel, args, wandb, optimizer, sched
             # save model
             model_to_save = (base_model.module if hasattr(base_model, "module") else base_model)  # Take care of distributed/parallel training
 
-            print("Saving model checkpoint to %s", args.output_dir)
+            print("Saving model checkpoint to %s".format(args.output_dir))
             torch.save(model_to_save.state_dict(), os.path.join(args.output_dir, "pytorch.bin"))
             # tokenizer.save_pretrained(args.output_dir)
             torch.save(args, os.path.join(args.output_dir, "training_args.bin"))

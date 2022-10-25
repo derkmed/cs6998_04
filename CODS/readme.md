@@ -80,7 +80,7 @@ which gives `All the cinemas are closed this weekend due to pandamic.` and `John
 
 Train segmentation classifier and dump test prediction (BERT) at `save/train_segment_predictor/pred_test_new.json`
 ```console
-❱❱❱ python train_segmemt_predictor.py --do_train --data_dir=SAMsum/clean_data/ --output_dir=save/train_segment_predictor/ 
+❱❱❱ python train_segment_predictor.py --do_train --data_dir=SAMsum/clean_data/ --output_dir=save/train_segment_predictor/ 
 ```
 
 Train Dialog Summarization
