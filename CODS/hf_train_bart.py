@@ -306,8 +306,10 @@ class Bart(nn.Module):
         return args
 
         
-    def load_examples(self,
-                      file_path):
+    def load_examples(self, file_path):
+        '''
+        Returns a list of examples.
+        '''
         examples = []
 
         # Get predicted segmentation for inference
@@ -796,25 +798,29 @@ if __name__ == '__main__':
         wandb.config.update(model.args)
         wandb.watch(model)
     
+    # Handles re/training. 
     if model.args.do_train:
         print("[INFO] Start training ...") 
         model.train()
-        model.generator = BartForConditionalGeneration.from_pretrained(model.args.model_name, state_dict = torch.load(os.path.join(model.args.output_dir, "pytorch.bin"))) 
+        model.generator = BartForConditionalGeneration.from_pretrained(model.args.model_name, 
+          state_dict = torch.load(os.path.join(model.args.output_dir, "pytorch.bin"))) 
         model.generator.to(model.device)
     else:
         if model.args.load_path == "":
             print("[ERROR] No trained model specified...")
             exit(1)
     
+    # Handles evaluation.
     print("[INFO] Start generate test summary...") 
     scores = model.evaluate(source="test", dump_pred=model.args.dump_pred)
     with open(os.path.join(model.args.output_dir, "test.metrics{}".format(model.args.add_name)), "w") as fout:
         json.dump(scores, fout, indent=4)
 
-    # Combine separate segments into one single summary for evaluation
+    # Single summary evaluation: Combine separate segments into one single summary for evaluation
     if model.args.do_segment:
         print("[INFO] Combine separate segments into one single summary...")
         
+        # Flatten into one single summary per sample ID.
         summarys = {}
         f_gold = json.load(open("SAMsum/clean_data/test.json", "r"))
         for di, data in enumerate(f_gold):
