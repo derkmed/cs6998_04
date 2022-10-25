@@ -308,7 +308,7 @@ class Bart(nn.Module):
         
     def load_examples(self, file_path):
         '''
-        Returns a list of examples.
+        Returns a list of examples {ID, context, summary, func_turn_label, module_index, key_phrases}
         '''
         examples = []
 
